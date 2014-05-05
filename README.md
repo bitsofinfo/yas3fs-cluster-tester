@@ -20,7 +20,7 @@ This may be useful to anyone who wants to validate/test [yas3fs](https://github.
 
 * Clone this repository
 * You need a Java JDK installed preferable 1.6+
-* You need Maven installed
+* You need [Maven](http://maven.apache.org/) installed
 * Change dir to the root of the project and run 'mvn package' (this will build a runnable Jar under target/)
 * Edit the yas3fsTester.properties file in the root of the project
 * run `java -jar -DconfigFile=yas3fsTester.properties /path/to/yas3fs-cluster-tester-1.0.jar`
