@@ -436,7 +436,22 @@ public class Yas3fsMountTest {
 					for (Message msg : messages) {
 						
 						Map<String,String> body = gson.fromJson(msg.getBody(), new TypeToken<Map<String, String>>(){}.getType()); 
-						Payload payload = gson.fromJson(body.get("Message"), Payload.class);
+						Payload payload = null;
+						
+						
+						try {
+							payload = gson.fromJson(body.get("Message"), Payload.class);
+						
+						} catch(Exception e) {
+							System.out.println("ERROR: unexpected error converting SQS Message " +
+									"body (json -> Payload) body= " + body.get("Message") + " error="+e.getMessage());
+							
+							// delete the message we just analyzed
+							sqsClient.deleteMessage(sqsQueueUrl, msg.getReceiptHandle());
+							
+							continue;
+						}
+						
 						System.out.println("Payload received: source: " + payload.sourceHost + ", type:" + payload.type + " data:" + payload.data);
 					
 						// if NOT equal to THIS MACHINE...
