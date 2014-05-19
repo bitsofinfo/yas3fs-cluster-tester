@@ -25,5 +25,5 @@ Overall you can use this for whatever purpose you wish in testing yas3fs; see ho
 * You need [Maven](http://maven.apache.org/) installed
 * Change dir to the root of the project and run 'mvn package' (this will build a runnable Jar under target/)
 * Edit the yas3fsTester.properties file in the root of the project
-* run `java -jar -DconfigFile=/path/to/yas3fsTester.properties /path/to/yas3fs-cluster-tester-1.0.jar`
+* run `java -jar -DconfigFilePath=/path/to/yas3fsTester.properties /path/to/yas3fs-cluster-tester-1.0.jar`
 * NOTE: you can run it optionally without a properties file, it will prompt you for all configuration
