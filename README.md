@@ -3,7 +3,7 @@ yas3fs-cluster-tester
 
 Test harness to induce file io and validate [yas3fs](https://github.com/danilop/yas3fs) cluster activity across a N [yas3fs](https://github.com/danilop/yas3fs) peer-nodes.
 
-This may be useful to anyone who wants to validate/test [yas3fs](https://github.com/danilop/yas3fs) to see how it behaves under load and with N peer's all managing files in the same S3 bucket. This has been used to test [yas3fs](https://github.com/danilop/yas3fs) against a several node "cluster" with each node generating hundreds of files.
+This may be useful to anyone who wants to validate/test [yas3fs](https://github.com/danilop/yas3fs) to see how it behaves under load and with N peer's all managing files in the same S3 bucket. This has been used to test [yas3fs](https://github.com/danilop/yas3fs) 20+ node "clusters" spread across separate data-centers, with each node generating thousands of files upwards of 5-15gb total in each node's file set size (total 'cluster' file-set > ~75g -> 100gb) . Current results are pretty promising, in such large scale tests, we've seen only a handful of missing files on a handful of participating nodes. Things can likely be done to improve yas3fs's robustness to recover in these situations.
 
 ## General Concepts
 
