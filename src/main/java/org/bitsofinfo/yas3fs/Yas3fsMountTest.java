@@ -129,6 +129,8 @@ public class Yas3fsMountTest {
 			int rereadLimitedTotalFiles = 0;
 			int rereadLimitedRereadsPerFile = 0;
 			
+			boolean skipVerifyPrompt = false;
+			
 			// props file specified?
 			Properties props = new Properties();
 			String confPath = System.getProperty("configFilePath");
@@ -149,6 +151,8 @@ public class Yas3fsMountTest {
 				s3MountPath = props.getProperty("local.s3mount.dir");
 				
 				reportsDir = props.getProperty("local.report.dir");
+				
+				skipVerifyPrompt = Boolean.valueOf(props.getProperty("skip.verify.prompt"));
 				
 				yas3fsCacheDir = props.getProperty("local.yas3fs.cache.dir");
 				
@@ -186,6 +190,8 @@ public class Yas3fsMountTest {
 				copyFromS3RetrySleepMS = Long.valueOf(getUserInput("Sleep time ms between retrying copy from S3 attempts: "));
 				verifyDir = getUserInput("Full path to local *verify* dir " +
 						"(where we will copy FROM the s3mount for verification) (NO TRAILING SLASH): ");
+				
+				skipVerifyPrompt = Boolean.valueOf(getUserInput("Skip prompt before file verification/report write stage? (true/false): "));
 				
 				s3MountPath = getUserInput("Local path to the S3 " +
 						"local directory mount i.e. /mnt/yas3fsMount (NO TRAILING SLASH): ");
@@ -362,10 +368,12 @@ public class Yas3fsMountTest {
 				System.out.println("-------------------------------------------");
 				
 				
-				ready = getUserInput("Ready? y/n (remember to answer on all servers/shells): ");
-				
-				if (!ready.equalsIgnoreCase("y")) {
-					return;
+				if (!skipVerifyPrompt) {
+					ready = getUserInput("Ready? y/n (remember to answer on all servers/shells): ");
+					
+					if (!ready.equalsIgnoreCase("y")) {
+						return;
+					}
 				}
 				
 				List<String> missingFilePaths = new ArrayList<String>();
