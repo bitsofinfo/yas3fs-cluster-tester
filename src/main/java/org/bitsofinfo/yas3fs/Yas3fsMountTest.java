@@ -336,13 +336,15 @@ public class Yas3fsMountTest {
 			// publish the S3 TOC to the topic 
 			snsClient.publish(snsTopicARN, gson.toJson(new Payload(mySourceIdentifier,"toc",getFileContents(S3TOC.getAbsolutePath()))));
 			
-			// THREAD 1 (copies generated file structure -> S3 and publishes each copy info to SNS topic)
-			Thread copyToS3Thread = new Thread(new Local2S3FileCopier(snsClient, snsTopicARN, localTOC.getAbsolutePath(),localTmpDir,s3MountPath));
-			copyToS3Thread.start();
-			
-			// THREAD 2 (responds to messages from SQS queue to copy files from the mount(s3) to local)
+			// THREAD 1 (responds to messages from SQS queue to copy files from the mount(s3) to local)
+			// start this prior to writes...
 			Thread copyFromS3Thread = new Thread(new S32LocalFileCopier(sqsClient, sqsQueueUrl, s3MountPath, verifyDir, maxCopyFromS3Attempts, copyFromS3RetrySleepMS));
 			copyFromS3Thread.start();
+			
+			// THREAD 2 (copies generated file structure -> S3 and publishes each copy info to SNS topic)
+			Thread copyToS3Thread = new Thread(new Local2S3FileCopier(snsClient, snsTopicARN, localTOC.getAbsolutePath(),localTmpDir,s3MountPath));
+			copyToS3Thread.start();
+
 
 			// wait for Thread1 and Thread2 to finish
 			while(!copyFrom_S3isDone || !copyTo_S3isDone) {
